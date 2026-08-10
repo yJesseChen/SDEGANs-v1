@@ -1,0 +1,33 @@
+{
+  "eqn_config": {
+    "_comment": "Ex8 of SDE Double Well",
+    "eqn_name": "Double_well",
+    "SDE": true,
+    "dim": 1,
+    "Delta": 0.01,
+    "sigma": 0.5
+  },
+  "net_config": {
+    "N_rec": 100,
+    "Rtype": "recurrent",
+    "N_his": 1,
+    "N_hidden": 3,
+    "N_nodes": 20,
+    "batch_size": 200,
+    "batch_period": 200,
+    "N_epochs": 2000,
+    "lr": {
+      "type_": "value",
+      "lrate": 0.001
+    }
+  },
+  "dat_config": {
+    "TrainData_dir": "./data/SDEEx8DW/Ex8DoubleWell_s05_train.mat",
+    "TestData_dir": "./data/SDEEx8DW/Ex8DoubleWell_s05_test.mat",
+    "n_ea_traj": 3
+  },
+  "show_config": {
+    "plot_rawode": true,
+    "plot_losthist": true
+  }
+}

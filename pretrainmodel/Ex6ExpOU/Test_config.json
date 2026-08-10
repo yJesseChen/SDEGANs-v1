@@ -1,0 +1,35 @@
+{
+  "eqn_config": {
+    "_comment": "Ex6 of SDE Exp OU process",
+    "eqn_name": "Exp_OU",
+    "SDE": true,
+    "dim": 1,
+    "Delta": 0.01,
+    "mu": -0.5,
+    "sigma": 0.3,
+    "theta": 1.0
+  },
+  "net_config": {
+    "N_rec": 50,
+    "Rtype": "recurrent",
+    "N_his": 1,
+    "N_hidden": 3,
+    "N_nodes": 20,
+    "batch_size": 200,
+    "batch_period": 200,
+    "N_epochs": 1000,
+    "lr": {
+      "type_": "value",
+      "lrate": 0.001
+    }
+  },
+  "dat_config": {
+    "TrainData_dir": "./data/SDEEx6ExpOU/Ex6ExpOU_train.mat",
+    "TestData_dir": "./data/SDEEx6ExpOU/Ex6ExpOU_test.mat",
+    "n_ea_traj": 3
+  },
+  "show_config": {
+    "plot_rawode": true,
+    "plot_losthist": true
+  }
+}

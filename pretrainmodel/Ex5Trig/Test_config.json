@@ -1,0 +1,34 @@
+{
+  "eqn_config": {
+    "_comment": "Ex5 of SDE Trig Drift",
+    "eqn_name": "Trig_drift",
+    "SDE": true,
+    "dim": 1,
+    "Delta": 0.01,
+    "k": 1,
+    "sigma": 0.5
+  },
+  "net_config": {
+    "N_rec": 50,
+    "Rtype": "recurrent",
+    "N_his": 1,
+    "N_hidden": 3,
+    "N_nodes": 20,
+    "batch_size": 200,
+    "batch_period": 200,
+    "N_epochs": 2000,
+    "lr": {
+      "type_": "value",
+      "lrate": 0.001
+    }
+  },
+  "dat_config": {
+    "TrainData_dir": "./data/SDEEx5Trig/Ex5Trig_train.mat",
+    "TestData_dir": "./data/SDEEx5Trig/Ex5Trig_test.mat",
+    "n_ea_traj": 3
+  },
+  "show_config": {
+    "plot_rawode": true,
+    "plot_losthist": true
+  }
+}

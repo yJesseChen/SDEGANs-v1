@@ -1,0 +1,52 @@
+{
+  "eqn_config": {
+    "_comment": "Ex10 of SDE Stochastic Occilator",
+    "eqn_name": "SO",
+    "SDE": true,
+    "dim": 2,
+    "Delta": 0.01,
+    "mu": [
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        0.0
+      ]
+    ],
+    "sigma": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        0.0
+      ]
+    ]
+  },
+  "net_config": {
+    "N_rec": 100,
+    "Rtype": "recurrent",
+    "N_his": 1,
+    "N_hidden": 3,
+    "N_nodes": 40,
+    "batch_size": 200,
+    "batch_period": 200,
+    "N_epochs": 5000,
+    "lr": {
+      "type_": "value",
+      "lrate": 0.001
+    }
+  },
+  "dat_config": {
+    "TrainData_dir": "./data/SDEEx10SO/Ex10SO_s01_train.mat",
+    "TestData_dir": "./data/SDEEx10SO/Ex10SO_s01_test.mat",
+    "n_ea_traj": 5
+  },
+  "show_config": {
+    "plot_rawode": true,
+    "plot_losthist": true
+  }
+}

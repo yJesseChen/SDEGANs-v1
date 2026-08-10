@@ -1,0 +1,108 @@
+{
+  "eqn_config": {
+    "_comment": "Ex5 of SDE Trig Drift",
+    "eqn_name": "Trig_drift",
+    "dim": 1,
+    "Delta": 0.01,
+    "k": 1,
+    "sigma": 0.5,
+    "resmodel_path": "./pretrainmodel/Ex5Trig/Best_model/checkpoint",
+    "resconfig_path": "./pretrainmodel/Ex5Trig/Test_config.json",
+    "resmodel": "ResNetwM"
+  },
+  "net_config": {
+    "N_rec": 40,
+    "n_Z": 10,
+    "G_type": "MLP",
+    "D_type": "MLP",
+    "G_hidden": 4,
+    "D_hidden": 4,
+    "G_nodes": 80,
+    "D_nodes": 80,
+    "G_opt": {
+      "type_": "Adam",
+      "lr": 5e-05,
+      "beta_1": 0.5,
+      "beta_2": 0.999
+    },
+    "D_opt": {
+      "type_": "Adam",
+      "lr": 5e-05,
+      "beta_1": 0.5,
+      "beta_2": 0.999
+    },
+    "n_critic": 5,
+    "batch_size": 500,
+    "N_epochs": 100000,
+    "Test_mode": "Multiple_last",
+    "model_name": "WGAN-GP3"
+  },
+  "dat_config": {
+    "TrainData_dir": "./data/Ex5Trig/Ex5Trig_train.mat",
+    "TestData_dir": "./data/Ex5Trig/Ex5Trig_test.mat",
+    "n_ea_traj": 1,
+    "N_pred": 5000
+  },
+  "show_config": {
+    "plot_samplecompare": true,
+    "plot_meancompare": true,
+    "plot_losthist": true
+  },
+  "monitor_config": {
+    "pdf_monitor": {
+      "if": false,
+      "period": 100,
+      "points": [
+        0.5,
+        1.0,
+        1.5,
+        2.0
+      ],
+      "int_long": 0.5
+    },
+    "repdf_display": {
+      "if": true,
+      "size": [
+        8,
+        8
+      ],
+      "range": [
+        0.3,
+        0.7
+      ],
+      "times": 20,
+      "int_long": 0.5
+    },
+    "traindata_hist": true,
+    "traintransin_hist": true,
+    "fake_check": {
+      "if": true,
+      "times": 20,
+      "int_long": 1.5
+    },
+    "cond_mv": {
+      "if": true,
+      "Npoint": 80,
+      "range": [
+        0.3,
+        0.7
+      ],
+      "times": 20
+    },
+    "Evameanv": {
+      "if": true,
+      "times": 20,
+      "type": "Multiple_last"
+    },
+    "loss": {
+      "if": true,
+      "times": 10
+    },
+    "Ens_monitor": {
+      "if": true,
+      "Ens_repdf": true,
+      "Ens_cond_mv": true,
+      "Ens_eva": true
+    }
+  }
+}
