@@ -53,12 +53,10 @@ Each deterministic model folder in this repository should keep:
 
 ```text
 pretrainmodel/<example_name>/Test_config.json
-pretrainmodel/<example_name>/Best_model/checkpoint
-pretrainmodel/<example_name>/Best_model/checkpoint.index
-pretrainmodel/<example_name>/Best_model/checkpoint.data-00000-of-00001
+pretrainmodel/<example_name>/Best_model/
 ```
 
-If TensorFlow creates additional checkpoint files with the same checkpoint prefix, keep those files as well. The important rule is that `Best_model/checkpoint` and the corresponding checkpoint index/data files must stay together.
+Keep the entire `Best_model/` folder, since TensorFlow checkpoints may contain several files that must stay together.
 
 The GAN config reads the deterministic map through:
 
