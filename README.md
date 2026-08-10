@@ -1,39 +1,74 @@
 # Stochastic FLow Map Learning with GANs
 
-This repository contains a cleaned code package for all numerical examples from
+This repository contains a cleaned code package for all numerical examples from the stochastic flow map learning with GANs paper. The code implements the GAN-based stochastic sub-map used in the stochastic flow map learning (sFML) framework. In these examples, a pretrained deterministic/residual flow-map component is loaded first, and a WGAN-GP model is used to learn the stochastic residual component.
 
-Chen, Y. and Xiu, D. (2024), "Learning stochastic dynamical system via flow map operator", Journal of Computational Physics.
+## References
 
-Paper: https://iamyuanchen.xyz/pdf/2024ChenXiu.pdf
+- Yuan Chen and Dongbin Xiu, `Learning stochastic dynamical system via flow map operator`, Journal of Computational Physics, 508, 112984, 2024.
+  https://iamyuanchen.xyz/pdf/2024ChenXiu.pdf
 
-The code implements the GAN-based stochastic sub-map used in the stochastic flow map learning (sFML) framework. In these examples, a pretrained deterministic/residual flow-map component is loaded first, and a WGAN-GP model is used to learn the stochastic residual component.
+## Requirements
+
+The original experiments were run with TensorFlow/Keras. A working environment should include:
+
+- Python 3
+- TensorFlow
+- NumPy
+- SciPy
+- Matplotlib
+- scikit-learn
+- munch
+- absl-py
+- tqdm
 
 ## Repository Structure
 
-Top-level Python files:
+The main folders are:
 
-- `SolveMixGANSde.py`: main training script for the mixed GAN-SDE model. It reads a config, loads data and the pretrained deterministic model, trains `MixGANSde3`, and writes output under `results/<test_name>/`.
-- `MixGANSde3.py`: the main GAN model used in the provided examples. The runs use `model_name = WGAN-GP3`.
-- `GANSde.py`: shared data handling, monitoring, prediction, and plotting utilities used by the GAN-SDE models.
-- `ResnetPDEwM.py`: pretrained deterministic/residual model class used by `MixGANSde3` to load the deterministic sub-map.
-- `ModelCheckpoint.py` and `cyc_callback.py`: helper callbacks used by `ResnetPDEwM.py`.
-- `Evaulation.py`: evaluation and plotting utilities for mean/std comparisons, sample plots, loss plots, and Wasserstein-distance plots.
-- `ShowPerformance.py`: postprocess script for generating standard evaluation plots from an existing result folder.
-- `ShowValidationMixGAN.py`: postprocess script for generating paper-style ensemble validation plots using the saved ensemble checkpoints in `Monitor/Ens_model/`.
+| Folder | Contents |
+| --- | --- |
+| `configs/` | Example JSON configs for the supported numerical examples. |
+| `data/` | MATLAB `.mat` datasets. In the current GitHub-ready copy, only the OU example data is included. |
+| `pretrainmodel/` | Pretrained deterministic/residual models needed by the GAN examples. |
+| `results/` | Trained GAN result folders. Each provided result folder is intentionally reduced to the config, final GAN weights, and ensemble weights needed for reproduction. |
 
-Folders:
+The main files are:
 
-- `configs/`: example JSON configs for the supported numerical examples.
-- `data/`: MATLAB `.mat` datasets. In the current GitHub-ready copy, only the OU example data is included.
-- `pretrainmodel/`: pretrained deterministic/residual models needed by the examples.
-- `results/`: trained GAN results. Each result folder is intentionally reduced to the information needed for reproduction:
-  - `Test_config.json`: exact config used for the saved run.
-  - `Test_model/`: final trained GAN checkpoint.
-  - `Monitor/Ens_model/`: ensemble checkpoints used by the paper-style validation code.
+| File | Purpose |
+| --- | --- |
+| `SolveMixGANSde.py` | Main training script for the mixed GAN-SDE model. It reads a config, loads data and the pretrained deterministic model, trains `MixGANSde3`, and writes output under `results/<test_name>/`. |
+| `MixGANSde3.py` | Main GAN model used in the provided examples. The runs use `model_name = WGAN-GP3`. |
+| `GANSde.py` | Shared data handling, monitoring, prediction, and plotting utilities used by the GAN-SDE models. |
+| `ResnetPDEwM.py` | Pretrained deterministic/residual model class used by `MixGANSde3` to load the deterministic sub-map. |
+| `ModelCheckpoint.py` | Custom checkpoint callback used by the deterministic/residual model code. |
+| `cyc_callback.py` | Cyclic learning-rate callback. |
+| `Evaulation.py` | Evaluation and plotting utilities for mean/std comparisons, sample plots, loss plots, and Wasserstein-distance plots. |
+| `ShowPerformance.py` | Postprocessing script for generating standard evaluation plots from an existing result folder. |
+| `ShowValidationMixGAN.py` | Postprocessing script for generating paper-style ensemble validation plots using the saved ensemble checkpoints in `Monitor/Ens_model/`. |
 
 Generated plots, monitor figures, logs, and `predict.mat` files are not included in the cleaned result folders.
 
-## Deterministic Map Pretraining
+## Included Example
+
+The result folders correspond to all numerical examples in Section 5 of the paper.
+
+| Result folder | Paper example | Equation name in config | Provided in this repository |
+|---|---|---|---|
+| `Excute_Ex3OUM3_1s1` | Section 5.1.1, Ornstein-Uhlenbeck process | `OU Process` | Config, final weights, ensemble weights, and OU data |
+| `Ex1GeoBrownianM3_3c9` | Section 5.1.2, geometric Brownian motion | `Geometric Brownian Motion` | Config, final weights, and ensemble weights |
+| `Excute_Ex4ExpDiffM3_2s5` | Section 5.2.1, SDE with nonlinear diffusion | `Exp_diffusion` | Config, final weights, and ensemble weights |
+| `Excute_Ex5TrigM3_2s1` | Section 5.2.2, trigonometric drift/diffusion example | `Trig_drift` | Config, final weights, and ensemble weights |
+| `Excute_Ex8s05DW_3s3` | Section 5.2.3, double-well potential | `Double_well` | Config, final weights, and ensemble weights |
+| `Excute_Ex9_2s5` | Section 5.3.1, exponential-noise example | `Exp_dis` | Config, final weights, and ensemble weights |
+| `Excute_Ex6ExpOUM3_1s7` | Section 5.3.2, exponential OU / non-Gaussian example | `Exp_OU` | Config, final weights, and ensemble weights |
+| `Excute_Ex7MdOU_4s1` | Section 5.4.1, two-dimensional OU process | `MdOU` | Config, final weights, and ensemble weights |
+| `Excute_Ex10_1s9` | Section 5.4.2, stochastic oscillator | `SO` | Config, final weights, and ensemble weights |
+
+Only the OU data folder is included in this cleaned copy. For the other examples, the configs retain the expected data paths; provide the corresponding `.mat` files under `data/` before rerunning training or validation.
+
+## Preparation
+
+### Deterministic Map Pretraining
 
 The GAN code does not learn the entire stochastic flow map from scratch. Each run first loads a deterministic ResNet flow map, then trains the GAN to learn the stochastic component around that deterministic prediction.
 
@@ -86,66 +121,63 @@ The provided examples use the following deterministic-map folders:
 
 To make a GAN run portable, keep both the deterministic model folder under `pretrainmodel/` and the GAN run folder under `results/`. The deterministic folder supplies the ResNet sub-map, while the result folder supplies the GAN config, final GAN weights, and ensemble checkpoints.
 
-## Environment
+### Config
 
-The original experiments were run with TensorFlow/Keras. A working environment should include:
+Each run is controlled by a JSON config file. The saved config in `results/<test_name>/Test_config.json` is the most reliable record for reproducing an existing run.
 
-- Python 3
-- TensorFlow
-- NumPy
-- SciPy
-- Matplotlib
-- scikit-learn
-- munch
-- absl-py
-- tqdm
+The main config sections are:
 
-## Running the Main Training Script
+`eqn_config`: equation and deterministic sub-map settings.
 
-Run from the repository root:
+- `eqn_name`: name of the SDE example. The code uses this to choose reference densities, reference moments, and plotting ranges.
+- `dim`: dimension of the state variable.
+- `Delta`: time step size.
+- Example-specific parameters: for example `mu`, `sigma`, `theta`, `k`, or other equation parameters used by the corresponding reference solution or drift model.
+- `resmodel`: deterministic sub-map type. In the provided examples this is usually `ResNetwM`.
+- `resmodel_path`: TensorFlow checkpoint path for the pretrained deterministic/residual model.
+- `resconfig_path`: config file for the pretrained deterministic/residual model.
 
-```bash
-python SolveMixGANSde.py \
-  --test_name=<new_result_name> \
-  --config_path=./configs/Ex3OUMix.json \
-  --model=WGAN-GP3
-```
+`net_config`: GAN architecture and training settings.
 
-For a new run, choose a fresh `--test_name` so that existing result folders are not overwritten.
+- `N_rec`: number of time steps used in each training sequence. In the GAN code this is the length of the trajectory segment seen by the discriminator.
+- `n_Z`: dimension of the Gaussian latent variable used by the generator.
+- `G_type`: generator architecture type. The provided runs use MLP-type generators.
+- `D_type`: discriminator architecture type. The provided runs use MLP-type discriminators.
+- `G_hidden`, `D_hidden`: number of hidden layers in the generator and discriminator.
+- `G_nodes`, `D_nodes`: number of nodes per hidden layer.
+- `G_opt`, `D_opt`: optimizer settings for generator and discriminator, including learning rate and optimizer hyperparameters.
+- `n_critic`: number of discriminator/critic updates per generator update.
+- `batch_size`: training batch size.
+- `N_epochs`: number of training epochs.
+- `Test_mode`: prediction mode during training. The provided runs use `Multiple_last` to collect predictions from multiple late-stage checkpoints.
+- `model_name`: model selector. The provided examples use `WGAN-GP3`.
 
-The script writes to:
+`dat_config`: data paths and prediction settings.
 
-```text
-results/<test_name>/
-```
+- `TrainData_dir`: path to the training `.mat` file.
+- `TestData_dir`: path to the test `.mat` file.
+- `n_ea_traj`: number of sampled training segments per long trajectory.
+- `N_pred`: number of prediction trajectories expected in the output. This should match the test-data trajectory count for the standard prediction routines.
 
-See the Model Outputs section for the files and figures generated by a full run. The cleaned result folders in this repository keep only the config and trained weights needed for reproduction.
+`show_config`: controls standard postprocessing plots in `ShowPerformance.py`.
 
-## Running Postprocessing Scripts
+- `plot_samplecompare`: generate sample trajectory comparison plots.
+- `plot_meancompare`: generate mean/std comparison plots.
+- `plot_losthist`: generate loss-history and Wasserstein-distance plots.
 
-Standard evaluation plots:
+`monitor_config`: controls diagnostics during training and paper-style validation.
 
-```bash
-python ShowPerformance.py \
-  --test_name=Excute_Ex3OUM3_1s1
-```
+- `pdf_monitor`: conditional density plotting during training.
+- `repdf_display`: repeated conditional density display.
+- `traindata_hist`: training-data histogram diagnostics.
+- `traintransin_hist`: transition-input histogram diagnostics.
+- `fake_check`: generated-sample diagnostics.
+- `cond_mv`: conditional mean/variance diagnostics.
+- `Evameanv`: recursive prediction and mean/std diagnostics.
+- `loss`: loss plotting frequency.
+- `Ens_monitor`: ensemble-checkpoint diagnostics. In the provided result folders, the saved ensemble checkpoints are kept under `Monitor/Ens_model/`.
 
-Paper-style ensemble validation plots:
-
-```bash
-python ShowValidationMixGAN.py \
-  --test_name=Excute_Ex3OUM3_1s1
-```
-
-`ShowValidationMixGAN.py` uses `results/<test_name>/Monitor/Ens_model/` and writes the paper-style figures into:
-
-```text
-results/<test_name>/a/
-```
-
-The generated `a/` folder is not tracked in the cleaned result package by default.
-
-## Data Format
+### Data Format
 
 Training and test data are stored as MATLAB `.mat` files. The expected key is:
 
@@ -178,71 +210,52 @@ The config file specifies the data paths:
 
 `N_pred` should match the number of test trajectories used when writing prediction arrays.
 
-## Config
+## Model Execution
 
-Each run is controlled by a JSON config file. The saved config in `results/<test_name>/Test_config.json` is the most reliable record for reproducing an existing run.
+### Training
 
-The main sections are:
+Run from the repository root:
 
-### `eqn_config`
+```bash
+python SolveMixGANSde.py \
+  --test_name=<new_result_name> \
+  --config_path=./configs/Ex3OUMix.json \
+  --model=WGAN-GP3
+```
 
-Equation and deterministic sub-map settings.
+For a new run, choose a fresh `--test_name` so that existing result folders are not overwritten.
 
-- `eqn_name`: name of the SDE example. The code uses this to choose reference densities, reference moments, and plotting ranges.
-- `dim`: dimension of the state variable.
-- `Delta`: time step size.
-- Example-specific parameters: for example `mu`, `sigma`, `theta`, `k`, or other equation parameters used by the corresponding reference solution or drift model.
-- `resmodel`: deterministic sub-map type. In the provided examples this is usually `ResNetwM`.
-- `resmodel_path`: TensorFlow checkpoint path for the pretrained deterministic/residual model.
-- `resconfig_path`: config file for the pretrained deterministic/residual model.
+The script writes to:
 
-### `net_config`
+```text
+results/<test_name>/
+```
 
-GAN architecture and training settings.
+See the Model Outputs section for the files and figures generated by a full run. The cleaned result folders in this repository keep only the config and trained weights needed for reproduction.
 
-- `N_rec`: number of time steps used in each training sequence. In the GAN code this is the length of the trajectory segment seen by the discriminator.
-- `n_Z`: dimension of the Gaussian latent variable used by the generator.
-- `G_type`: generator architecture type. The provided runs use MLP-type generators.
-- `D_type`: discriminator architecture type. The provided runs use MLP-type discriminators.
-- `G_hidden`, `D_hidden`: number of hidden layers in the generator and discriminator.
-- `G_nodes`, `D_nodes`: number of nodes per hidden layer.
-- `G_opt`, `D_opt`: optimizer settings for generator and discriminator, including learning rate and optimizer hyperparameters.
-- `n_critic`: number of discriminator/critic updates per generator update.
-- `batch_size`: training batch size.
-- `N_epochs`: number of training epochs.
-- `Test_mode`: prediction mode during training. The provided runs use `Multiple_last` to collect predictions from multiple late-stage checkpoints.
-- `model_name`: model selector. The provided examples use `WGAN-GP3`.
+### Post Test and Validation
 
-### `dat_config`
+Standard evaluation plots:
 
-Data paths and prediction settings.
+```bash
+python ShowPerformance.py \
+  --test_name=Excute_Ex3OUM3_1s1
+```
 
-- `TrainData_dir`: path to the training `.mat` file.
-- `TestData_dir`: path to the test `.mat` file.
-- `n_ea_traj`: number of sampled training segments per long trajectory.
-- `N_pred`: number of prediction trajectories expected in the output. This should match the test-data trajectory count for the standard prediction routines.
+Paper-style ensemble validation plots:
 
-### `show_config`
+```bash
+python ShowValidationMixGAN.py \
+  --test_name=Excute_Ex3OUM3_1s1
+```
 
-Controls standard postprocessing plots in `ShowPerformance.py`.
+`ShowValidationMixGAN.py` uses `results/<test_name>/Monitor/Ens_model/` and writes the paper-style figures into:
 
-- `plot_samplecompare`: generate sample trajectory comparison plots.
-- `plot_meancompare`: generate mean/std comparison plots.
-- `plot_losthist`: generate loss-history and Wasserstein-distance plots.
+```text
+results/<test_name>/a/
+```
 
-### `monitor_config`
-
-Controls diagnostics during training and paper-style validation.
-
-- `pdf_monitor`: conditional density plotting during training.
-- `repdf_display`: repeated conditional density display.
-- `traindata_hist`: training-data histogram diagnostics.
-- `traintransin_hist`: transition-input histogram diagnostics.
-- `fake_check`: generated-sample diagnostics.
-- `cond_mv`: conditional mean/variance diagnostics.
-- `Evameanv`: recursive prediction and mean/std diagnostics.
-- `loss`: loss plotting frequency.
-- `Ens_monitor`: ensemble-checkpoint diagnostics. In the provided result folders, the saved ensemble checkpoints are kept under `Monitor/Ens_model/`.
+The generated `a/` folder is not tracked in the cleaned result package by default.
 
 ## Model Outputs
 
@@ -281,21 +294,3 @@ results/<test_name>/a/
 ```
 
 The generated figures, monitor images, logs, `predict.mat`, and `a/` folders are not tracked in the cleaned result package by default. The cleaned result folders keep the config, final GAN weights, and ensemble weights needed for reproduction.
-
-## Provided Examples
-
-The result folders correspond to the numerical examples in Section 5 of the paper.
-
-| Result folder | Paper example | Equation name in config | Provided in this repository |
-|---|---|---|---|
-| `Excute_Ex3OUM3_1s1` | Section 5.1.1, Ornstein-Uhlenbeck process | `OU Process` | Config, final weights, ensemble weights, and OU data |
-| `Ex1GeoBrownianM3_3c9` | Section 5.1.2, geometric Brownian motion | `Geometric Brownian Motion` | Config, final weights, and ensemble weights |
-| `Excute_Ex4ExpDiffM3_2s5` | Section 5.2.1, SDE with nonlinear diffusion | `Exp_diffusion` | Config, final weights, and ensemble weights |
-| `Excute_Ex5TrigM3_2s1` | Section 5.2.2, trigonometric drift/diffusion example | `Trig_drift` | Config, final weights, and ensemble weights |
-| `Excute_Ex8s05DW_3s3` | Section 5.2.3, double-well potential | `Double_well` | Config, final weights, and ensemble weights |
-| `Excute_Ex9_2s5` | Section 5.3.1, exponential-noise example | `Exp_dis` | Config, final weights, and ensemble weights |
-| `Excute_Ex6ExpOUM3_1s7` | Section 5.3.2, exponential OU / non-Gaussian example | `Exp_OU` | Config, final weights, and ensemble weights |
-| `Excute_Ex7MdOU_4s1` | Section 5.4.1, two-dimensional OU process | `MdOU` | Config, final weights, and ensemble weights |
-| `Excute_Ex10_1s9` | Section 5.4.2, stochastic oscillator | `SO` | Config, final weights, and ensemble weights |
-
-Only the OU data folder is included in this cleaned copy. For the other examples, the configs retain the expected data paths; provide the corresponding `.mat` files under `data/` before rerunning training or validation.
