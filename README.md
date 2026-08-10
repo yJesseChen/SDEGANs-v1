@@ -33,6 +33,61 @@ Folders:
 
 Generated plots, monitor figures, logs, and `predict.mat` files are not included in the cleaned result folders.
 
+## Deterministic Map Pretraining
+
+The GAN code does not learn the entire stochastic flow map from scratch. Each run first loads a deterministic ResNet flow map, then trains the GAN to learn the stochastic component around that deterministic prediction.
+
+The deterministic map can be generated with the companion repository:
+
+https://github.com/yJesseChen/ResNetPDE-v1
+
+In that repository, train the deterministic model with `SolveResnetwM.py`. For example, for the OU case:
+
+```bash
+python SolveResnetwM.py --test_name=SDEEx3OU --config_path=./configs/SDEEx3OU.json
+```
+
+After training, copy the deterministic-map files from the ResNetPDE result folder into this repository under `pretrainmodel/<example_name>/`.
+
+Each deterministic model folder in this repository should keep:
+
+```text
+pretrainmodel/<example_name>/Test_config.json
+pretrainmodel/<example_name>/Best_model/checkpoint
+pretrainmodel/<example_name>/Best_model/checkpoint.index
+pretrainmodel/<example_name>/Best_model/checkpoint.data-00000-of-00001
+```
+
+If TensorFlow creates additional checkpoint files with the same checkpoint prefix, keep those files as well. The important rule is that `Best_model/checkpoint` and the corresponding checkpoint index/data files must stay together.
+
+The GAN config reads the deterministic map through:
+
+```json
+"eqn_config": {
+  "resmodel": "ResNetwM",
+  "resmodel_path": "./pretrainmodel/<example_name>/Best_model/checkpoint",
+  "resconfig_path": "./pretrainmodel/<example_name>/Test_config.json"
+}
+```
+
+For an existing result folder, `results/<test_name>/Test_config.json` is the most reliable source for the exact deterministic-map paths used by that run.
+
+The provided examples use the following deterministic-map folders:
+
+| GAN result folder | Deterministic map folder |
+|---|---|
+| `Excute_Ex3OUM3_1s1` | `pretrainmodel/Ex3OU/` |
+| `Ex1GeoBrownianM3_3c9` | `pretrainmodel/Ex1GeoBrownianm2s1/` |
+| `Excute_Ex4ExpDiffM3_2s5` | `pretrainmodel/Ex4ExpDiff/` |
+| `Excute_Ex5TrigM3_2s1` | `pretrainmodel/Ex5Trig/` |
+| `Excute_Ex8s05DW_3s3` | `pretrainmodel/Ex8DWs05/` |
+| `Excute_Ex9_2s5` | `pretrainmodel/Ex9Expdis/` |
+| `Excute_Ex6ExpOUM3_1s7` | `pretrainmodel/Ex6ExpOU/` |
+| `Excute_Ex7MdOU_4s1` | `pretrainmodel/Ex7MdOU/` |
+| `Excute_Ex10_1s9` | `pretrainmodel/Ex10SOs01/` |
+
+To make a GAN run portable, keep both the deterministic model folder under `pretrainmodel/` and the GAN run folder under `results/`. The deterministic folder supplies the ResNet sub-map, while the result folder supplies the GAN config, final GAN weights, and ensemble checkpoints.
+
 ## Environment
 
 The original experiments were run with TensorFlow/Keras. A working environment should include:
@@ -208,4 +263,3 @@ The result folders correspond to the numerical examples in Section 5 of the pape
 | `Excute_Ex10_1s9` | Section 5.4.2, stochastic oscillator | `SO` | Config, final weights, and ensemble weights |
 
 Only the OU data folder is included in this cleaned copy. For the other examples, the configs retain the expected data paths; provide the corresponding `.mat` files under `data/` before rerunning training or validation.
-
