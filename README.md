@@ -1,4 +1,4 @@
-# sFML GAN examples
+# Stochastic FLow Map Learning with GANs
 
 This repository contains a cleaned code package for all numerical examples from
 
