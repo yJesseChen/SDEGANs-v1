@@ -145,6 +145,20 @@ results/<test_name>/a/
 
 The generated `a/` folder is not tracked in the cleaned result package by default.
 
+## Prediction
+
+The provided runs use ensemble prediction to reduce uncertainty from a single saved neural-network checkpoint.
+
+During training, the code saves 10 consecutive models from the later stage of training under:
+
+```text
+results/<test_name>/Monitor/Ens_model/
+```
+
+During prediction, each generated trajectory is propagated by randomly selecting one of these 10 saved models. The selection is uniform: each model is chosen with probability `1/10`. A fresh random draw is used during prediction, so the final prediction ensemble mixes outputs from the 10 consecutive saved models rather than relying on a single checkpoint.
+
+This is the reason the cleaned result folders keep `Monitor/Ens_model/` in addition to `Test_model/`: `Test_model/` stores the final GAN checkpoint, while `Monitor/Ens_model/` stores the ensemble checkpoints used by the paper-style prediction and validation routines.
+
 ## Data Format
 
 Training and test data are stored as MATLAB `.mat` files. The expected key is:
