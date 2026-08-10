@@ -209,9 +209,3 @@ The result folders correspond to the numerical examples in Section 5 of the pape
 
 Only the OU data folder is included in this cleaned copy. For the other examples, the configs retain the expected data paths; provide the corresponding `.mat` files under `data/` before rerunning training or validation.
 
-## Notes
-
-- The examples use `WGAN-GP3`.
-- The paper-style validation uses ensemble checkpoints saved under `Monitor/Ens_model/`.
-- Generated plots and predictions are intentionally omitted from `results/` so that the repository stays small.
-- The pretrained deterministic models in `pretrainmodel/` are required for loading the deterministic sub-map in each example.
