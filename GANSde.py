@@ -1520,10 +1520,11 @@ class Monitor():
 		for i in range(min(DatVes.dim,10)):
 			fig,ax = self.plot_meanstd(test_data[i].T,pre_[i].T,self.eqn_config.dim,self.eqn_config.Delta,savepath=savepath+'/MV'+str(i)+'.pdf')
 			self.plotmultipledata((pre_[i].T),[0,(N_T-1)*self.Delta],Num,"OrRd",save=savepath+'/Sample'+str(i)+'.pdf')
-		try:
-			sio.savemat('/Users/jesse/Desktop/a.mat',{'pred':pre_[i].T})
-		except:
-			pass
+		# Debug-only local save disabled in the public package.
+		# try:
+		# 	sio.savemat('debug_prediction.mat',{'pred':pre_[i].T})
+		# except:
+		# 	pass
 		if self.eqn_config.dim==2:
 			if self.eqn_config.eqn_name=='MdOU':
 				Nump = 1

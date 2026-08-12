@@ -64,7 +64,7 @@ The result folders correspond to all numerical examples in Section 5 of the pape
 | `Excute_Ex7MdOU_4s1` | Section 5.4.1, two-dimensional OU process | `MdOU` | Config, final weights, and ensemble weights |
 | `Excute_Ex10_1s9` | Section 5.4.2, stochastic oscillator | `SO` | Config, final weights, and ensemble weights |
 
-Only the OU data folder is included in this cleaned copy. For the other examples, the configs retain the expected data paths; provide the corresponding `.mat` files under `data/` before rerunning training or validation.
+**Generated `.mat` data files are not included in this repository by default, except for the small OU data folder kept as a runnable example. For the other examples, generate the data with `SDEDATA-v1` or place the corresponding `.mat` files under the paths specified in the config before rerunning training or validation.**
 
 ## Preparation
 
@@ -294,3 +294,24 @@ results/<test_name>/a/
 ```
 
 The generated figures, monitor images, logs, `predict.mat`, and `a/` folders are not tracked in the cleaned result package by default. The cleaned result folders keep the config, final GAN weights, and ensemble weights needed for reproduction.
+
+## Minimal Reproduction Workflow
+
+For a saved GAN example in `results/<test_name>/`, the usual reproduction workflow is:
+
+1. Generate or copy the required `.mat` data files into the paths specified by `results/<test_name>/Test_config.json`.
+2. Make sure the deterministic flow-map folder referenced by `resmodel_path` and `resconfig_path` exists under `pretrainmodel/`.
+3. Generate standard evaluation plots:
+
+```bash
+python ShowPerformance.py --test_name=<test_name>
+```
+
+4. Generate paper-style ensemble validation plots:
+
+```bash
+python ShowValidationMixGAN.py --test_name=<test_name>
+```
+
+Generated prediction files and figures are written under the corresponding `results/<test_name>/` subfolders and are not tracked by git.
+
